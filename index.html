@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>通识博主清单 4.0</title>
+  <style>
+    :root {
+      --bg: #f0f2f5;
+      --card-bg: #ffffff;
+      --text: #1a1a2e;
+      --text-secondary: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-hover: 0 10px 25px rgba(0,0,0,0.1);
+      --accent: #4f46e5;
+      --accent-light: #eef2ff;
+      --header-bg: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+      --table-stripe: #f9fafb;
+      --badge-bilibili: #00a1d6;
+      --badge-douyin: #161823;
+      --badge-other: #6b7280;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border: #334155;
+      --shadow: 0 1px 3px rgba(0,0,0,0.2);
+      --shadow-hover: 0 10px 25px rgba(0,0,0,0.3);
+      --accent-light: #1e1b4b;
+      --table-stripe: #1a2332;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+      line-height: 1.6;
+    }
+
+    .header {
+      background: var(--header-bg);
+      color: white;
+      padding: 40px 24px 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .header p {
+      margin-top: 8px;
+      opacity: 0.9;
+      font-size: 15px;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: background 0.2s, transform 0.2s;
+      color: white;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.1);
+    }
+
+    /* Nav Tabs */
+    .nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 24px 0;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .nav::-webkit-scrollbar { display: none; }
+
+    .nav-tab {
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .nav-tab:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .nav-tab.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* Content */
+    .content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .section {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .section-icon {
+      font-size: 28px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    /* Style Group */
+    .style-group {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .style-label {
+      padding: 12px 20px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--accent);
+      background: var(--accent-light);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Table */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      border-bottom: 2px solid var(--border);
+      background: var(--table-stripe);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: var(--accent-light);
+    }
+
+    .blogger-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .blogger-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .blogger-name {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .blogger-name a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .blogger-name a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: white;
+    }
+
+    .badge-bilibili { background: var(--badge-bilibili); }
+    .badge-douyin { background: var(--badge-douyin); }
+    .badge-other { background: var(--badge-other); }
+    .badge-tencent { background: #40a7e2; }
+    .badge-publisher { background: #8b5cf6; }
+
+    .age-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    [data-theme="dark"] .age-tag {
+      background: #451a03;
+      color: #fbbf24;
+    }
+
+    .note {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.5;
+      max-width: 400px;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 32px 24px;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header h1 { font-size: 24px; }
+      .nav { padding: 16px 16px 0; }
+      .content { padding: 16px; }
+      th, td { padding: 10px 12px; }
+      .note { max-width: 200px; }
+      .blogger-avatar { width: 30px; height: 30px; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-tab { padding: 8px 14px; font-size: 13px; }
+      table { font-size: 13px; }
+      th:nth-child(4), td:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>通识博主清单 4.0</h1>
+    <p>为孩子筛选优质知识博主与书籍资源</p>
+    <button class="theme-toggle" id="themeBtn" aria-label="切换主题">🌙</button>
+  </header>
+
+  <nav class="nav" id="nav"></nav>
+
+  <main class="content" id="content"></main>
+
+  <footer class="footer">
+    通识博主清单 4.0 · 为孩子的全面发展助力
+  </footer>
+
+  <script src="data.js"></script>
+  <script>
+    // Theme
+    const themeBtn = document.getElementById('themeBtn');
+    const html = document.documentElement;
+
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.setAttribute('data-theme', 'dark');
+      themeBtn.textContent = '☀️';
+    }
+
+    themeBtn.addEventListener('click', () => {
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      themeBtn.textContent = isDark ? '🌙' : '☀️';
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    });
+
+    // Platform helpers
+    function getPlatformBadge(platform) {
+      if (platform === 'b站') return '<span class="badge badge-bilibili">B站</span>';
+      if (platform === '抖音') return '<span class="badge badge-douyin">抖音</span>';
+      if (platform === '腾讯视频') return '<span class="badge badge-tencent">腾讯视频</span>';
+      return '<span class="badge badge-other">' + platform + '</span>';
+    }
+
+    function getAgeTag(age) {
+      return '<span class="age-tag">' + age + '</span>';
+    }
+
+    function getSearchUrl(name, platform) {
+      if (platform === 'b站') return 'https://search.bilibili.com/all?keyword=' + encodeURIComponent(name);
+      if (platform === '抖音') return 'https://www.douyin.com/search/' + encodeURIComponent(name);
+      if (platform === '腾讯视频') return 'https://v.qq.com/x/search/?q=' + encodeURIComponent(name);
+      return '#';
+    }
+
+    // Render nav
+    const nav = document.getElementById('nav');
+    const content = document.getElementById('content');
+
+    DATA.forEach((cat, i) => {
+      const tab = document.createElement('button');
+      tab.className = 'nav-tab' + (i === 0 ? ' active' : '');
+      tab.textContent = cat.icon + ' ' + cat.title;
+      tab.dataset.index = i;
+      tab.addEventListener('click', () => switchTab(i));
+      nav.appendChild(tab);
+    });
+
+    function switchTab(idx) {
+      document.querySelectorAll('.nav-tab').forEach((t, i) => {
+        t.classList.toggle('active', i === idx);
+      });
+      document.querySelectorAll('.section').forEach((s, i) => {
+        s.classList.toggle('active', i === idx);
+      });
+    }
+
+    // Render sections
+    DATA.forEach((cat) => {
+      const section = document.createElement('div');
+      section.className = 'section' + (cat === DATA[0] ? ' active' : '');
+
+      let html = `
+        <div class="section-header">
+          <span class="section-icon">${cat.icon}</span>
+          <h2 class="section-title">${cat.title}</h2>
+        </div>
+      `;
+
+      cat.styles.forEach(style => {
+        html += `
+          <div class="style-group">
+            <div class="style-label">${style.name}</div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>博主/书名</th>
+                    <th>平台</th>
+                    <th>年龄建议</th>
+                    <th>备注</th>
+                  </tr>
+                </thead>
+                <tbody>
+        `;
+
+        style.items.forEach(item => {
+          const url = item.url || getSearchUrl(item.name, item.platform);
+          const avatarHtml = item.avatar
+            ? `<img class="blogger-avatar" src="${item.avatar}" alt="${item.name}" loading="lazy" onerror="this.style.display='none'">`
+            : '';
+          html += `
+            <tr>
+              <td>
+                <div class="blogger-info">
+                  ${avatarHtml}
+                  <span class="blogger-name">
+                    <a href="${url}" target="_blank" rel="noopener">${item.name}</a>
+                  </span>
+                </div>
+              </td>
+              <td>${getPlatformBadge(item.platform)}</td>
+              <td>${getAgeTag(item.age)}</td>
+              <td class="note">${item.note}</td>
+            </tr>
+          `;
+        });
+
+        html += `
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      });
+
+      section.innerHTML = html;
+      content.appendChild(section);
+    });
+  </script>
+</body>
+</html>
