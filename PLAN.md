@@ -42,3 +42,6 @@ PLAN.md             ← 本计划文件
 1. 创建 `PLAN.md` ✅
 2. 创建 `index.html`（含内联 CSS + JS）
 3. 浏览器打开验证效果
+
+## 自动同步
+- 已配置 git post-commit 钩子，每次 commit 后自动 push 到 GitHub。
