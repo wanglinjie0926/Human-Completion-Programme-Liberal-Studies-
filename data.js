@@ -21,7 +21,7 @@ const DATA = [
       {
         name: "幽默好玩",
         items: [
-          { name: "如果历史是一群喵", platform: "b站", age: "6+", note: "中国史，Q版，简短好玩，喜欢猫的孩子会很开心", url: "https://space.bilibili.com/327957875" },
+          { name: "如果历史是一群喵", platform: "b站", age: "6+", note: "中国史，Q版，简短好玩，喜欢猫的孩子会很开心", url: "https://www.bilibili.com/bangumi/media/md129152", avatar: "https://i0.hdslb.com/bfs/bangumi/e6cf75db82e292f7b5ca29c96767464c686dc94d.jpg" },
           { name: "唠点历史", platform: "b站", age: "6+", note: "中外史，合集很全，最近出了一个孩子看的动画系列", url: "https://space.bilibili.com/439352442" },
           { name: "混子哥边画边讲", platform: "抖音", age: "6+", note: "中国史，幽默直观容易懂，吃饭的时候全家看", url: "https://www.douyin.com/user/MS4wLjABAAAAPnnxbLz0N2OHDocvlJr6dgYOSkMAKHzZh7gh-tnJv-Hym473AHwxavItEYIjSkmY", avatar: "https://p3-pc.douyinpic.com/img/aweme-avatar/tos-cn-i-0813c001_oYCUNI8QDkSznCfbgEfPAxAAcFS2AoAArsK99k~c5_300x300.jpeg" },
           { name: "小Q不是导盲犬", platform: "b站", age: "10+", note: "中外史和时事，专注国际关系的顶流UP主，兼具趣味性和专业性", url: "https://space.bilibili.com/546189", avatar: "https://i0.hdslb.com/bfs/face/3b59fb5c73d1de935acab4447f3f000e1aa783f1.jpg" },
